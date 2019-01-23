@@ -199,9 +199,11 @@ namespace Volboard
 
         private void SoundList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var sound = ((ListBox)sender).SelectedItem as Sound;
+            var sound = (sender as ListBox).SelectedItem as Sound;
 
             selectedSound = sound;
+
+            RightPanel.DataContext = selectedSound;
 
             UpdateSoundPanel();
         }
