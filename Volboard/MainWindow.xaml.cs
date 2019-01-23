@@ -127,8 +127,6 @@ namespace Volboard
             {
                 selectedSound.Loop = false;
             }
-
-            LoopLatency.IsEnabled = false;
         }
 
         private void LoopChecked(object sender, RoutedEventArgs e)
@@ -137,8 +135,6 @@ namespace Volboard
             {
                 selectedSound.Loop = true;
             }
-
-            LoopLatency.IsEnabled = true;
         }
 
         private void UpdateVolume(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -210,53 +206,24 @@ namespace Volboard
 
         private void UpdateSoundPanel()
         {
-            if (selectedSound == null)
-            {
-                ((FrameworkElement)PathBlock.Parent).IsEnabled = false;
-
-                PathBlock.Text = string.Empty;
-                PathBlock.ToolTip = string.Empty;
-
-                BindButton.Content = "[Unbound]";
-
-                PlayButton.Content = "Play";
-
-                VolumeSlider.Value = VolumeSlider.Maximum;
-
-                LoopCheckBox.IsChecked = false;
-
-                return;
-            }
-
-            ((FrameworkElement)PathBlock.Parent).IsEnabled = true;
-
-            PathBlock.Text = selectedSound.Name;
-            PathBlock.ToolTip = selectedSound.FilePath;
-
-            BindButton.Content = selectedSound.Key != null ? "Bound to " + selectedSound.Key.ToString() : "[Unbound]";
-
-            PlayButton.Content = selectedSound.Playing ? "Stop" : "Play";
-
-            VolumeSlider.Value = selectedSound.Volume;
-
-            LoopCheckBox.IsChecked = selectedSound.Loop;
-
-            LoopLatency.IsEnabled = LoopCheckBox.IsChecked ?? false;
-            LoopLatency.Text = selectedSound.LoopLatency.ToString();
-
-            StartLatency.Text = selectedSound.PlayLatency.ToString();
         }
 
         private void StartLatencyChanged(object sender, TextChangedEventArgs e)
         {
-            int.TryParse((sender as TextBox).Text, out int latencyChange);
-            selectedSound.PlayLatency = latencyChange;
+            if (selectedSound != null)
+            {
+                int.TryParse((sender as TextBox).Text, out int latencyChange);
+                selectedSound.PlayLatency = latencyChange;
+            }
         }
 
         private void LoopLatencyChanged(object sender, TextChangedEventArgs e)
         {
-            int.TryParse((sender as TextBox).Text, out int latencyChange);
-            selectedSound.LoopLatency = latencyChange;
+            if (selectedSound != null)
+            {
+                int.TryParse((sender as TextBox).Text, out int latencyChange);
+                selectedSound.LoopLatency = latencyChange;
+            }
         }
     }
 }

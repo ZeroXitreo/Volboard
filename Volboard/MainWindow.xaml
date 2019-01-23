@@ -27,18 +27,49 @@
         <StackPanel Margin="5,10,10,5" Grid.Column="1">
         </StackPanel>
         <DockPanel x:Name="RightPanel" Margin="5,10,10,10" Grid.Column="1" LastChildFill="False">
-            <TextBlock Text="{Binding Name}" Margin="0,0,0,5" DockPanel.Dock="Top"/>
-            <TextBlock x:Name="PathBlock" TextWrapping="Wrap" Text="Nothing selected" Margin="0,0,0,5" DockPanel.Dock="Top"/>
-            <Slider x:Name="VolumeSlider" Maximum="1" Minimum="0" Value="1" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="UpdateVolume" Margin="0,0,0,5" DockPanel.Dock="Top"/>
+            <DockPanel.Style>
+                <Style TargetType="DockPanel">
+                    <Setter Property="IsEnabled" Value="True"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DockPanel.Style>
+            <TextBlock Text="{Binding Name}" ToolTip="{Binding FilePath}" Margin="0,0,0,5" DockPanel.Dock="Top"/>
+            <Slider Maximum="1" Minimum="0" Value="{Binding Volume}" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="UpdateVolume" Margin="0,0,0,5" DockPanel.Dock="Top"/>
             <Label Content="Start latency (ms)" DockPanel.Dock="Top"/>
-            <TextBox x:Name="StartLatency" DockPanel.Dock="Top" Margin="0,0,0,5" TextChanged="StartLatencyChanged"/>
-            <CheckBox x:Name="LoopCheckBox" Content="Loop" DockPanel.Dock="Top" Margin="0,0,0,5" Checked="LoopChecked" Unchecked="LoopUnchecked"/>
+            <TextBox Text="{Binding PlayLatency}" DockPanel.Dock="Top" Margin="0,0,0,5" TextChanged="StartLatencyChanged"/>
+            <CheckBox IsChecked="{Binding Loop}" Content="Loop" DockPanel.Dock="Top" Margin="0,0,0,5" Checked="LoopChecked" Unchecked="LoopUnchecked"/>
             <Label Content="Loop latency (ms)" DockPanel.Dock="Top"/>
-            <TextBox x:Name="LoopLatency" DockPanel.Dock="Top" Margin="0,0,0,5" TextChanged="LoopLatencyChanged"/>
+            <TextBox Text="{Binding LoopLatency}" DockPanel.Dock="Top" Margin="0,0,0,5" TextChanged="LoopLatencyChanged"/>
             
             <Button Content="Remove" Click="RemoveSound" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
-            <Button x:Name="PlayButton" Content="Play" Click="TogglePlay" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10"/>
-            <Button x:Name="BindButton" Content="[Unbound]" Click="ChangeBind" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10"/>
+            <Button Click="TogglePlay" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Play"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Playing}" Value="True">
+                                <Setter Property="Content" Value="Stop"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Click="ChangeBind" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="{Binding Key, StringFormat=Bound to {0}}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Key}" Value="{x:Null}">
+                                <Setter Property="Content" Value="[Unbound]"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </DockPanel>
     </Grid>
 </Window>
