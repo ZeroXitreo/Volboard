@@ -57,21 +57,23 @@ namespace VolBoard
             }
             else
             {
-                new Thread(() =>
+                worker = new Thread(StartLatency);
+                worker.IsBackground = true;
+                worker.Start();
+            }
+        }
+        
+        private void StartLatency()
+        {
+            brake.WaitOne(PlayLatency);
+
+            // Once done waiting, check if the file should still play
+            if (Playing)
+            {
+                Dispatcher.Invoke(() =>
                 {
-                    Thread.CurrentThread.IsBackground = true;
-                    brake.WaitOne(PlayLatency);
-
-                    // Once done waiting, check if the file should still play
-                    if (Playing)
-                    {
-                        Dispatcher.Invoke(() =>
-                        {
-                            InternalPlay();
-                        });
-                    }
-
-                }).Start();
+                    InternalPlay();
+                });
             }
         }
 
