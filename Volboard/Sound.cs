@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace VolBoard
+namespace Volboard
 {
     public class Sound : MediaPlayer, INotifyPropertyChanged
     {
