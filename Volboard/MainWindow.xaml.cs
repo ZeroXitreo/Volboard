@@ -25,11 +25,13 @@ namespace VolBoard
     public partial class MainWindow : Window
     {
         private readonly ObservableCollection<Sound> sounds = new ObservableCollection<Sound>();
-        private Sound soundSelected;
+        private Sound selectedSound;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            UpdateSoundPanel();
 
             SoundList.ItemsSource = sounds;
             SoundList.DataContext = this;
@@ -93,15 +95,8 @@ namespace VolBoard
                 {
                     Sound snd = new Sound(file);
                     sounds.Add(snd);
-                    snd.MediaEnded += Snd_MediaEnded;
                 }
             }
-        }
-
-        private void Snd_MediaEnded(object sender, EventArgs e)
-        {
-            Debug.WriteLine("Ended!");
-            SoundList.Items.Refresh();
         }
 
         private Key? RequestKey()
@@ -115,65 +110,54 @@ namespace VolBoard
 
         private void RemoveSound(object sender, RoutedEventArgs e)
         {
-            FrameworkElement fe = sender as FrameworkElement;
-            Sound mySound = (Sound)fe.DataContext;
+            selectedSound.Stop();
 
-            mySound.Stop();
-
-            sounds.Remove(mySound);
+            sounds.Remove(selectedSound);
         }
 
         private void ChangeBind(object sender, RoutedEventArgs e)
         {
-            FrameworkElement fe = sender as FrameworkElement;
-            Sound mySound = (Sound)fe.DataContext;
+            selectedSound.Key = RequestKey();
 
-            mySound.Key = RequestKey();
-
-            SoundList.Items.Refresh();
+            UpdateSoundPanel();
         }
 
         private void LoopUnchecked(object sender, RoutedEventArgs e)
         {
-            FrameworkElement fe = sender as FrameworkElement;
-            Sound mySound = (Sound)fe.DataContext;
-
-            mySound.Loop = false;
+            if (selectedSound != null)
+            {
+                selectedSound.Loop = false;
+            }
         }
 
         private void LoopChecked(object sender, RoutedEventArgs e)
         {
-            FrameworkElement fe = sender as FrameworkElement;
-            Sound mySound = (Sound)fe.DataContext;
-
-            mySound.Loop = true;
+            if (selectedSound != null)
+            {
+                selectedSound.Loop = true;
+            }
         }
 
         private void UpdateVolume(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            FrameworkElement fe = sender as FrameworkElement;
-            Sound mySound = (Sound)fe.DataContext;
-
-            Slider slider = sender as Slider;
-
-            mySound.Volume = slider.Value;
+            if (selectedSound != null)
+            {
+                selectedSound.Volume = (sender as Slider).Value;
+            }
         }
 
         private void TogglePlay(object sender, RoutedEventArgs e)
         {
-            FrameworkElement fe = sender as FrameworkElement;
-            Sound sound = (Sound)fe.DataContext;
-
-            if (sound.Playing)
+            if (selectedSound.Playing)
             {
-                sound.Stop();
+                selectedSound.Stop();
             }
             else
             {
-                sound.Play();
+                selectedSound.Play();
             }
 
-            SoundList.Items.Refresh();
+            UpdateSoundPanel();
         }
 
         private void ClosingMain(object sender, CancelEventArgs e)
@@ -215,15 +199,43 @@ namespace VolBoard
         {
             var sound = ((ListBox)sender).SelectedItem as Sound;
 
-            soundSelected = sound;
+            selectedSound = sound;
 
-            if (soundSelected == null)
+            UpdateSoundPanel();
+        }
+
+        private void UpdateSoundPanel()
+        {
+            if (selectedSound == null)
             {
+                ((FrameworkElement)PathBlock.Parent).IsEnabled = false;
+
                 PathBlock.Text = string.Empty;
+                PathBlock.ToolTip = string.Empty;
+
+                BindButton.Content = "Unbound";
+
+                PlayButton.Content = "Play";
+
+                VolumeSlider.Value = VolumeSlider.Maximum;
+
+                LoopCheckBox.IsChecked = false;
+
                 return;
             }
 
-            PathBlock.Text = sound.FilePath;
+            ((FrameworkElement)PathBlock.Parent).IsEnabled = true;
+
+            PathBlock.Text = selectedSound.Name;
+            PathBlock.ToolTip = selectedSound.FilePath;
+            
+            BindButton.Content = selectedSound.Key != null ? selectedSound.Key.ToString() : "Unbound";
+
+            PlayButton.Content = selectedSound.Playing ? "Stop" : "Play";
+
+            VolumeSlider.Value = selectedSound.Volume;
+            
+            LoopCheckBox.IsChecked = selectedSound.Loop;
         }
     }
 }
