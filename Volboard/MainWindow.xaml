@@ -28,7 +28,12 @@
         <DockPanel Margin="5,10,10,10" Grid.Column="1" LastChildFill="False">
             <TextBlock x:Name="PathBlock" TextWrapping="Wrap" Text="Nothing selected" Margin="0,0,0,5" DockPanel.Dock="Top"/>
             <Slider x:Name="VolumeSlider" Maximum="1" Minimum="0" Value="1" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="UpdateVolume" Margin="0,0,0,5" DockPanel.Dock="Top"/>
+            <Label Content="Start latency (ms)" DockPanel.Dock="Top"/>
+            <TextBox x:Name="StartLatency" DockPanel.Dock="Top" Margin="0,0,0,5" TextChanged="StartLatencyChanged"/>
             <CheckBox x:Name="LoopCheckBox" Content="Loop" DockPanel.Dock="Top" Margin="0,0,0,5" Checked="LoopChecked" Unchecked="LoopUnchecked"/>
+            <Label Content="Loop latency (ms)" DockPanel.Dock="Top"/>
+            <TextBox x:Name="LoopLatency" DockPanel.Dock="Top" Margin="0,0,0,5" TextChanged="LoopLatencyChanged"/>
+            
             <Button Content="Remove" Click="RemoveSound" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
             <Button x:Name="PlayButton" Content="Play" Click="TogglePlay" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10"/>
             <Button x:Name="BindButton" Content="[Unbound]" Click="ChangeBind" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10"/>

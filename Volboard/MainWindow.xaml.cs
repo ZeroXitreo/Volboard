@@ -110,7 +110,7 @@ namespace VolBoard
 
         private void RemoveSound(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to remove {selectedSound.Name}?", "Delete Confirmation", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to remove {selectedSound.Name}?", "Remove Confirmation", MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
                 selectedSound.Stop();
@@ -131,6 +131,8 @@ namespace VolBoard
             {
                 selectedSound.Loop = false;
             }
+
+            LoopLatency.IsEnabled = false;
         }
 
         private void LoopChecked(object sender, RoutedEventArgs e)
@@ -139,6 +141,8 @@ namespace VolBoard
             {
                 selectedSound.Loop = true;
             }
+
+            LoopLatency.IsEnabled = true;
         }
 
         private void UpdateVolume(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -239,6 +243,23 @@ namespace VolBoard
             VolumeSlider.Value = selectedSound.Volume;
 
             LoopCheckBox.IsChecked = selectedSound.Loop;
+
+            LoopLatency.IsEnabled = LoopCheckBox.IsChecked ?? false;
+            LoopLatency.Text = selectedSound.LoopLatency.ToString();
+
+            StartLatency.Text = selectedSound.PlayLatency.ToString();
+        }
+
+        private void StartLatencyChanged(object sender, TextChangedEventArgs e)
+        {
+            int.TryParse((sender as TextBox).Text, out int latencyChange);
+            selectedSound.PlayLatency = latencyChange;
+        }
+
+        private void LoopLatencyChanged(object sender, TextChangedEventArgs e)
+        {
+            int.TryParse((sender as TextBox).Text, out int latencyChange);
+            selectedSound.LoopLatency = latencyChange;
         }
     }
 }
