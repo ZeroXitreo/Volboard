@@ -40,11 +40,7 @@ namespace VolBoard
 
             foreach (SoundStore sndStore in sndStores)
             {
-                Sound snd = new Sound(sndStore.Path);
-                snd.Loop = sndStore.Loop;
-                snd.Volume = sndStore.Volume;
-                snd.Key = sndStore.Key;
-                sounds.Add(snd);
+                sounds.Add(sndStore.Export());
             }
         }
 
@@ -173,8 +169,7 @@ namespace VolBoard
 
             foreach (Sound sound in sounds)
             {
-                SoundStore sndStore = new SoundStore(sound.FilePath, sound.Loop, sound.Volume, sound.Key);
-                soundStores.Add(sndStore);
+                soundStores.Add(new SoundStore(sound));
             }
 
             SerializeManager.Save(soundStores);

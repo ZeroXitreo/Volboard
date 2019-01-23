@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,24 +13,23 @@ using System.Windows.Media;
 
 namespace VolBoard
 {
-    public class Sound : MediaPlayer
+    public class Sound : MediaPlayer, INotifyPropertyChanged
     {
+        private int playLatency;
+        private int loopLatency;
+        private bool loop;
         private bool initiated = false;
-        public string FilePath { get; }
-        public string Name
-        {
-            get
-            {
-                return Path.GetFileNameWithoutExtension(FilePath);
-            }
-        }
-
-        public bool Loop { get; set; } = false;
-        public int LoopLatency { get; set; }
-        public int PlayLatency { get; set; }
-
+        private Key? key = null;
+        private bool playing = false;
         private Thread worker;
         private ManualResetEvent brake = new ManualResetEvent(false);
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
         public Sound(string path)
         {
@@ -37,10 +38,97 @@ namespace VolBoard
 
             MediaEnded += SoundMediaEnded;
         }
+        
+        public string FilePath { get; }
+
+        public string Name
+        {
+            get
+            {
+                return Path.GetFileNameWithoutExtension(FilePath);
+            }
+        }
+
+        public Key? Key
+        {
+            get
+            {
+                return key;
+            }
+            set
+            {
+                key = value;
+                NotifyPropertyChanged();
+                KeyBound = string.Empty;
+            }
+        }
+
+        public string KeyBound
+        {
+            get
+            {
+                return Key.ToString();
+            }
+            set
+            {
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool Playing
+        {
+            get
+            {
+                return playing;
+            }
+            set
+            {
+                playing = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public bool Loop
+        {
+            get
+            {
+                return loop;
+            }
+            set
+            {
+                loop = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int LoopLatency
+        {
+            get
+            {
+                return loopLatency;
+            }
+            set
+            {
+                loopLatency = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public int PlayLatency
+        {
+            get
+            {
+                return playLatency;
+            }
+            set
+            {
+                playLatency = value;
+                NotifyPropertyChanged();
+            }
+        }
 
         public new void Play()
         {
-            // TEST
             brake.Reset();
 
             if (!initiated)
@@ -62,7 +150,7 @@ namespace VolBoard
                 worker.Start();
             }
         }
-        
+
         private void StartLatency()
         {
             brake.WaitOne(PlayLatency);
@@ -81,8 +169,6 @@ namespace VolBoard
         {
             Playing = false;
             InternalStop();
-
-            // TEST
             brake.Set();
         }
 
@@ -131,8 +217,5 @@ namespace VolBoard
         {
             base.Play();
         }
-
-        public Key? Key { get; internal set; } = null;
-        public bool Playing { get; private set; } = false;
     }
 }

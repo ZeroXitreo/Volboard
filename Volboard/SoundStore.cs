@@ -10,17 +10,34 @@ namespace VolBoard
     [Serializable]
     class SoundStore
     {
-        public readonly string Path;
-        public readonly bool Loop;
-        public readonly double Volume;
-        public readonly Key? Key;
+        private string filePath;
+        private bool loop;
+        private double volume;
+        private Key? key;
+        private int loopLatency;
+        private int playLatency;
 
-        public SoundStore(string path, bool loop, double volume, Key? key)
+        public SoundStore(Sound sound)
         {
-            Path = path;
-            Loop = loop;
-            Volume = volume;
-            Key = key;
+            filePath = sound.FilePath;
+            loop = sound.Loop;
+            volume = sound.Volume;
+            key = sound.Key;
+            loopLatency = sound.LoopLatency;
+            playLatency = sound.PlayLatency;
+        }
+
+        public Sound Export()
+        {
+            Sound sound = new Sound(filePath)
+            {
+                Loop = loop,
+                Volume = volume,
+                Key = key,
+                LoopLatency = loopLatency,
+                PlayLatency = playLatency
+            };
+            return sound;
         }
     }
 }

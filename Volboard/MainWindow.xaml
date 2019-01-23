@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VolBoard"
-        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Volboard" Height="450" Width="800" KeyDown="OnKeyDown" WindowStartupLocation="CenterScreen" Closing="ClosingMain">
     <Grid>
@@ -12,10 +10,13 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="256"/>
         </Grid.ColumnDefinitions>
-        <ListBox Name="SoundList" SelectionChanged="SoundList_SelectionChanged" Margin="10,35,0,10">
+        <ListBox HorizontalContentAlignment="Stretch" Name="SoundList" SelectionChanged="SoundList_SelectionChanged" Margin="10,35,0,10">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" ToolTip="{Binding FilePath}"/>
+                    <DockPanel>
+                        <TextBlock Text="{Binding KeyBound}" ToolTip="{Binding Key}" DockPanel.Dock="Right"/>
+                        <TextBlock Text="{Binding Name}" ToolTip="{Binding FilePath}"/>
+                    </DockPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListBox>
