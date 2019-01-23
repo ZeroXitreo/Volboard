@@ -5,10 +5,13 @@ using System.Diagnostics;
 
 public static class SerializeManager
 {
-    private static readonly string SaveFileExtension = ".sav";
+    public static string SaveLocation;
+    private static readonly string SaveFileExtension = ".volb";
 
     public static void Save<T>(T serializableData)
     {
+        Directory.CreateDirectory(Path.GetDirectoryName(GetPath<T>())); // Creates a directory to the file if a directory doesn't exist
+
         BinaryFormatter bf = new BinaryFormatter();
         FileStream stream = new FileStream(GetPath<T>(), FileMode.Create);
 
@@ -50,8 +53,20 @@ public static class SerializeManager
 
     public static string GetPath<T>()
     {
-        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), typeof(T) + SaveFileExtension);
-        Debug.WriteLine(path);
-        return Path.Combine(path);
+        string path;
+        if (SaveLocation == null)
+        {
+            path = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName),
+                typeof(T) + SaveFileExtension
+            );
+        }
+        else
+        {
+            path = SaveLocation;
+        }
+
+        return path;
     }
 }

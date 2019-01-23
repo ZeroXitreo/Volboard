@@ -8,38 +8,46 @@
         mc:Ignorable="d"
         Title="Volboard" Height="450" Width="800" KeyDown="OnKeyDown" WindowStartupLocation="CenterScreen" Closing="ClosingMain">
     <Grid>
-        <ScrollViewer Margin="10,35,10,10">
-            <ItemsControl Name="SoundList">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="224"/>
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Margin="10,35,1,10">
+            <ListBox Name="SoundList" SelectionChanged="SoundList_SelectionChanged">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DockPanel VerticalAlignment="Top" Margin="0,0,0,5">
-                            <Button Content="Remove" Click="RemoveSound" DockPanel.Dock="Right" Margin="0,0,5,0" VerticalAlignment="Center" Padding="4,1"/>
-                            <Button Content="{Binding Key}" DockPanel.Dock="Right" Margin="0,0,5,0" Height="Auto" Width="32" Click="ChangeBind" VerticalAlignment="Stretch" Padding="4,1"/>
-                            <Button DockPanel.Dock="Right" Margin="0,0,5,0" Height="Auto" Width="Auto" Click="TogglePlay" VerticalAlignment="Center" Padding="4,1">
-                                <Button.Style>
-                                    <Style TargetType="Button">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Playing}" Value="false">
-                                                <Setter Property="Content" Value="Play" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Playing}" Value="true">
-                                                <Setter Property="Content" Value="Stop" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            <Slider Width="128" Maximum="1" Minimum="0" TickFrequency="0.01" IsSnapToTickEnabled="True" Value="{Binding Volume}" DockPanel.Dock="Right" Margin="0,0,5,0" ValueChanged="UpdateVolume" VerticalAlignment="Center"/>
-                            <CheckBox Content="Loop" IsChecked="{Binding Loop}" DockPanel.Dock="Right" Margin="0,0,5,0" Checked="LoopChecked" Unchecked="LoopUnchecked" VerticalAlignment="Center"/>
-                            <Label Content="{Binding Name}" ToolTip="{Binding FilePath}" Margin="0,0,5,0"/>
+                            <Label Content="{Binding Name}" ToolTip="{Binding FilePath}" Margin="0,0,5,0" HorizontalAlignment="Left"/>
                         </DockPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
-            </ItemsControl>
+            </ListBox>
         </ScrollViewer>
-        <DockPanel LastChildFill="True" Margin="10,10,10,0" VerticalAlignment="Top">
+        <DockPanel LastChildFill="True" Margin="10,10,1,0" VerticalAlignment="Top" Height="20">
             <Button Content="Browse for sounds..." Click="BrowseForFile" Padding="4,1,4,1"/>
             <TextBox x:Name="SearchBox" ToolTip="Search..." VerticalContentAlignment="Center" Grid.Column="1" Margin="5,0,0,0" TextChanged="Search"/>
         </DockPanel>
+        <StackPanel Margin="10" Grid.Column="1">
+            <TextBlock x:Name="PathBlock" TextWrapping="Wrap" Text="Nothing selected" VerticalAlignment="Top"/>
+            <Button Content="Remove" Click="RemoveSound" DockPanel.Dock="Right" Margin="0,0,5,0" VerticalAlignment="Center" Padding="4,1"/>
+            <Button Content="{Binding Key}" DockPanel.Dock="Right" Margin="0,0,5,0" Height="Auto" Width="32" Click="ChangeBind" VerticalAlignment="Stretch" Padding="4,1"/>
+            <Button DockPanel.Dock="Right" Margin="0,0,5,0" Height="Auto" Width="Auto" Click="TogglePlay" VerticalAlignment="Center" Padding="4,1">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Playing}" Value="false">
+                                <Setter Property="Content" Value="Play" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Playing}" Value="true">
+                                <Setter Property="Content" Value="Stop" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Slider Width="128" Maximum="1" Minimum="0" TickFrequency="0.01" IsSnapToTickEnabled="True" Value="{Binding Volume}" DockPanel.Dock="Right" Margin="0,0,5,0" ValueChanged="UpdateVolume" VerticalAlignment="Center"/>
+            <CheckBox Content="Loop" IsChecked="{Binding Loop}" DockPanel.Dock="Right" Margin="0,0,5,0" Checked="LoopChecked" Unchecked="LoopUnchecked" VerticalAlignment="Center"/>
+            <Label Content="{Binding Name}" ToolTip="{Binding FilePath}" Margin="0,0,5,0" HorizontalAlignment="Left"/>
+        </StackPanel>
     </Grid>
 </Window>

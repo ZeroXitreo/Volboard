@@ -12,6 +12,7 @@ namespace VolBoard
 {
     public class Sound : MediaPlayer
     {
+        private bool initiated = false;
         public string FilePath { get; }
         public string Name
         {
@@ -25,16 +26,15 @@ namespace VolBoard
 
         public Sound(string path)
         {
+            MediaEnded += SoundMediaEnded;
             FilePath = path;
             Volume = 1;
-            Open(new Uri(path));
-
-            MediaEnded += SoundMediaEnded;
         }
 
         private void SoundMediaEnded(object sender, EventArgs e)
         {
             Stop();
+
             if (Loop)
             {
                 Play();
@@ -43,6 +43,11 @@ namespace VolBoard
 
         public new void Play()
         {
+            if (!initiated)
+            {
+                Open(new Uri(FilePath));
+                initiated = true;
+            }
             base.Play();
             Playing = true;
         }

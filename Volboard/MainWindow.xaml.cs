@@ -25,6 +25,7 @@ namespace VolBoard
     public partial class MainWindow : Window
     {
         private readonly ObservableCollection<Sound> sounds = new ObservableCollection<Sound>();
+        private Sound soundSelected;
 
         public MainWindow()
         {
@@ -81,18 +82,25 @@ namespace VolBoard
         private void BrowseForFile(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Multiselect = true;
+            dlg.Title = "Browse for sounds or music";
+            dlg.Filter = "Sound Files (*.mp3;*.wav)|*.mp3;*.wav";
             bool? result = dlg.ShowDialog();
 
             if (result == true)
             {
-                Sound snd = new Sound(dlg.FileName);
-                sounds.Add(snd);
-                snd.MediaEnded += Snd_MediaEnded;
+                foreach (string file in dlg.FileNames)
+                {
+                    Sound snd = new Sound(file);
+                    sounds.Add(snd);
+                    snd.MediaEnded += Snd_MediaEnded;
+                }
             }
         }
 
         private void Snd_MediaEnded(object sender, EventArgs e)
         {
+            Debug.WriteLine("Ended!");
             SoundList.Items.Refresh();
         }
 
@@ -155,7 +163,7 @@ namespace VolBoard
         {
             FrameworkElement fe = sender as FrameworkElement;
             Sound sound = (Sound)fe.DataContext;
-            
+
             if (sound.Playing)
             {
                 sound.Stop();
@@ -197,11 +205,25 @@ namespace VolBoard
                 {
                     if (Regex.IsMatch(sound.Name, search.Text, RegexOptions.IgnoreCase)) // search exists in the name of the file
                     {
-                        Debug.WriteLine("Found");
                         soundsShown.Add(sound);
                     }
                 }
             }
+        }
+
+        private void SoundList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var sound = ((ListBox)sender).SelectedItem as Sound;
+
+            soundSelected = sound;
+
+            if (soundSelected == null)
+            {
+                PathBlock.Text = string.Empty;
+                return;
+            }
+
+            PathBlock.Text = sound.FilePath;
         }
     }
 }
