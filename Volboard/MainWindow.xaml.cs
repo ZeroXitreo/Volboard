@@ -110,9 +110,12 @@ namespace VolBoard
 
         private void RemoveSound(object sender, RoutedEventArgs e)
         {
-            selectedSound.Stop();
-
-            sounds.Remove(selectedSound);
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to remove {selectedSound.Name}?", "Delete Confirmation", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                selectedSound.Stop();
+                sounds.Remove(selectedSound);
+            }
         }
 
         private void ChangeBind(object sender, RoutedEventArgs e)
@@ -213,7 +216,7 @@ namespace VolBoard
                 PathBlock.Text = string.Empty;
                 PathBlock.ToolTip = string.Empty;
 
-                BindButton.Content = "Unbound";
+                BindButton.Content = "[Unbound]";
 
                 PlayButton.Content = "Play";
 
@@ -228,13 +231,13 @@ namespace VolBoard
 
             PathBlock.Text = selectedSound.Name;
             PathBlock.ToolTip = selectedSound.FilePath;
-            
-            BindButton.Content = selectedSound.Key != null ? selectedSound.Key.ToString() : "Unbound";
+
+            BindButton.Content = selectedSound.Key != null ? "Bound to " + selectedSound.Key.ToString() : "[Unbound]";
 
             PlayButton.Content = selectedSound.Playing ? "Stop" : "Play";
 
             VolumeSlider.Value = selectedSound.Volume;
-            
+
             LoopCheckBox.IsChecked = selectedSound.Loop;
         }
     }

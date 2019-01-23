@@ -12,7 +12,7 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="256"/>
         </Grid.ColumnDefinitions>
-        <ListBox Name="SoundList" SelectionChanged="SoundList_SelectionChanged" Margin="10,35,1,10">
+        <ListBox Name="SoundList" SelectionChanged="SoundList_SelectionChanged" Margin="10,35,0,10">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" ToolTip="{Binding FilePath}"/>
@@ -24,12 +24,14 @@
             <TextBox x:Name="SearchBox" ToolTip="Search..." VerticalContentAlignment="Center" Grid.Column="1" Margin="5,0,0,0" TextChanged="Search"/>
         </DockPanel>
         <StackPanel Margin="5,10,10,5" Grid.Column="1">
-            <TextBlock x:Name="PathBlock" TextWrapping="Wrap" Text="Nothing selected" VerticalAlignment="Top" Margin="0,0,0,5"/>
-            <Button Content="Remove" Click="RemoveSound" Margin="0,0,0,5"/>
-            <Button x:Name="BindButton" Content="Unbound" Click="ChangeBind" Margin="0,0,0,5"/>
-            <Button x:Name="PlayButton" Content="Play" Click="TogglePlay" Margin="0,0,0,5"/>
-            <Slider x:Name="VolumeSlider" Maximum="1" Minimum="0" Value="1" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="UpdateVolume" Margin="0,0,0,5"/>
-            <CheckBox x:Name="LoopCheckBox" Content="Loop" DockPanel.Dock="Right" Margin="0,0,0,5" Checked="LoopChecked" Unchecked="LoopUnchecked"/>
         </StackPanel>
+        <DockPanel Margin="5,10,10,10" Grid.Column="1" LastChildFill="False">
+            <TextBlock x:Name="PathBlock" TextWrapping="Wrap" Text="Nothing selected" Margin="0,0,0,5" DockPanel.Dock="Top"/>
+            <Slider x:Name="VolumeSlider" Maximum="1" Minimum="0" Value="1" TickFrequency="0.01" IsSnapToTickEnabled="True" ValueChanged="UpdateVolume" Margin="0,0,0,5" DockPanel.Dock="Top"/>
+            <CheckBox x:Name="LoopCheckBox" Content="Loop" DockPanel.Dock="Top" Margin="0,0,0,5" Checked="LoopChecked" Unchecked="LoopUnchecked"/>
+            <Button Content="Remove" Click="RemoveSound" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
+            <Button x:Name="PlayButton" Content="Play" Click="TogglePlay" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10"/>
+            <Button x:Name="BindButton" Content="[Unbound]" Click="ChangeBind" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10"/>
+        </DockPanel>
     </Grid>
 </Window>
