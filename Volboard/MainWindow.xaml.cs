@@ -25,15 +25,12 @@ namespace VolBoard
     public partial class MainWindow : Window
     {
         private readonly ObservableCollection<Sound> sounds = new ObservableCollection<Sound>();
-        private ObservableCollection<Sound> soundsShown = new ObservableCollection<Sound>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            soundsShown = sounds;
-            
-            SoundList.ItemsSource = soundsShown;
+            SoundList.ItemsSource = sounds;
             SoundList.DataContext = this;
 
             List<SoundStore> sndStores = SerializeManager.Load<List<SoundStore>>();
@@ -50,31 +47,40 @@ namespace VolBoard
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape)
+            if (SearchBox.IsFocused)
             {
-                foreach (Sound sound in sounds)
+                if (e.Key == Key.Escape)
                 {
-                    sound.Stop();
                 }
             }
             else
             {
-                foreach (Sound sound in sounds)
+                if (e.Key == Key.Escape)
                 {
-                    if (e.Key == sound.Key)
+                    foreach (Sound sound in sounds)
                     {
-                        if (sound.Playing)
-                        {
-                            sound.Stop();
-                        }
-                        else
-                        {
-                            sound.Play();
-                        }
+                        sound.Stop();
                     }
                 }
+                else
+                {
+                    foreach (Sound sound in sounds)
+                    {
+                        if (e.Key == sound.Key)
+                        {
+                            if (sound.Playing)
+                            {
+                                sound.Stop();
+                            }
+                            else
+                            {
+                                sound.Play();
+                            }
+                        }
+                    }
 
-                SoundList.Items.Refresh();
+                    SoundList.Items.Refresh();
+                }
             }
         }
 
@@ -186,16 +192,18 @@ namespace VolBoard
             TextBox search = sender as TextBox;
             if (search.Text == string.Empty)
             {
-                soundsShown = sounds;
+                SoundList.ItemsSource = sounds;
             }
             else
             {
-                soundsShown = new ObservableCollection<Sound>();
+                ObservableCollection<Sound> soundsShown = new ObservableCollection<Sound>();
+                SoundList.ItemsSource = soundsShown;
 
                 foreach (Sound sound in sounds)
                 {
-                    if (Regex.IsMatch(sound.Name, search.Text)) // search exists in the name of the file
+                    if (Regex.IsMatch(sound.Name, search.Text, RegexOptions.IgnoreCase)) // search exists in the name of the file
                     {
+                        Debug.WriteLine("Found");
                         soundsShown.Add(sound);
                     }
                 }

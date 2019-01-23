@@ -39,7 +39,7 @@
         </ScrollViewer>
         <DockPanel LastChildFill="True" Margin="10,10,10,0" VerticalAlignment="Top">
             <Button Content="Browse for sounds..." Click="BrowseForFile" Padding="4,1,4,1"/>
-            <TextBox ToolTip="Search..." VerticalContentAlignment="Center" Grid.Column="1" Margin="5,0,0,0" TextChanged="Search"/>
+            <TextBox x:Name="SearchBox" ToolTip="Search..." VerticalContentAlignment="Center" Grid.Column="1" Margin="5,0,0,0" TextChanged="Search"/>
         </DockPanel>
     </Grid>
 </Window>
