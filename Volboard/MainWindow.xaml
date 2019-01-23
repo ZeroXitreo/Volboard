@@ -1,0 +1,45 @@
+﻿<Window x:Class="VolBoard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VolBoard"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Volboard" Height="450" Width="800" KeyDown="OnKeyDown" WindowStartupLocation="CenterScreen" Closing="ClosingMain">
+    <Grid>
+        <ScrollViewer Margin="10,35,10,10">
+            <ItemsControl Name="SoundList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel VerticalAlignment="Top" Margin="0,0,0,5">
+                            <Button Content="Remove" Click="RemoveSound" DockPanel.Dock="Right" Margin="0,0,5,0" VerticalAlignment="Center" Padding="4,1"/>
+                            <Button Content="{Binding Key}" DockPanel.Dock="Right" Margin="0,0,5,0" Height="Auto" Width="32" Click="ChangeBind" VerticalAlignment="Stretch" Padding="4,1"/>
+                            <Button DockPanel.Dock="Right" Margin="0,0,5,0" Height="Auto" Width="Auto" Click="TogglePlay" VerticalAlignment="Center" Padding="4,1">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Playing}" Value="false">
+                                                <Setter Property="Content" Value="Play" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Playing}" Value="true">
+                                                <Setter Property="Content" Value="Stop" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            <Slider Width="128" Maximum="1" Minimum="0" TickFrequency="0.01" IsSnapToTickEnabled="True" Value="{Binding Volume}" DockPanel.Dock="Right" Margin="0,0,5,0" ValueChanged="UpdateVolume" VerticalAlignment="Center"/>
+                            <CheckBox Content="Loop" IsChecked="{Binding Loop}" DockPanel.Dock="Right" Margin="0,0,5,0" Checked="LoopChecked" Unchecked="LoopUnchecked" VerticalAlignment="Center"/>
+                            <Label Content="{Binding Name}" ToolTip="{Binding FilePath}" Margin="0,0,5,0"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <DockPanel LastChildFill="True" Margin="10,10,10,0" VerticalAlignment="Top">
+            <Button Content="Browse for sounds..." Click="BrowseForFile" Padding="4,1,4,1"/>
+            <TextBox ToolTip="Search..." VerticalContentAlignment="Center" Grid.Column="1" Margin="5,0,0,0" TextChanged="Search"/>
+        </DockPanel>
+    </Grid>
+</Window>
