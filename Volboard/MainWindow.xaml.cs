@@ -47,13 +47,7 @@ namespace VolBoard
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (SearchBox.IsFocused)
-            {
-                if (e.Key == Key.Escape)
-                {
-                }
-            }
-            else
+            if (!SearchBox.IsFocused)
             {
                 if (e.Key == Key.Escape)
                 {
