@@ -27,6 +27,19 @@ namespace Volboard
         private ObservableCollection<Sound> sounds = new ObservableCollection<Sound>();
         private Sound selectedSound;
 
+        private Sound SelectedSound
+        {
+            get
+            {
+                return selectedSound;
+            }
+            set
+            {
+                selectedSound = value;
+                SoundList.SelectedItem = selectedSound;
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -111,54 +124,69 @@ namespace Volboard
 
         private void RemoveSound(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to remove {selectedSound.Name}?", "Remove Confirmation", MessageBoxButton.YesNo);
+            MessageBoxResult messageBoxResult = MessageBox.Show($"Are you sure you want to remove {SelectedSound.Name}?", "Remove Confirmation", MessageBoxButton.YesNo);
             if (messageBoxResult == MessageBoxResult.Yes)
             {
-                selectedSound.Stop();
-                sounds.Remove(selectedSound);
+                SelectedSound.Stop();
+
+                int index = sounds.IndexOf(SelectedSound);
+
+                sounds.Remove(SelectedSound);
+
+                if (sounds.Count > 0)
+                {
+                    if (sounds.Count - 1 < index)
+                    {
+                        SelectedSound = sounds[index - 1];
+                    }
+                    else
+                    {
+                        SelectedSound = sounds[index];
+                    }
+                }
             }
         }
 
         private void ChangeBind(object sender, RoutedEventArgs e)
         {
-            selectedSound.Key = RequestKey();
+            SelectedSound.Key = RequestKey();
             
             SortSounds();
         }
 
         private void LoopUnchecked(object sender, RoutedEventArgs e)
         {
-            if (selectedSound != null)
+            if (SelectedSound != null)
             {
-                selectedSound.Loop = false;
+                SelectedSound.Loop = false;
             }
         }
 
         private void LoopChecked(object sender, RoutedEventArgs e)
         {
-            if (selectedSound != null)
+            if (SelectedSound != null)
             {
-                selectedSound.Loop = true;
+                SelectedSound.Loop = true;
             }
         }
 
         private void UpdateVolume(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (selectedSound != null)
+            if (SelectedSound != null)
             {
-                selectedSound.Volume = (sender as Slider).Value;
+                SelectedSound.Volume = (sender as Slider).Value;
             }
         }
 
         private void TogglePlay(object sender, RoutedEventArgs e)
         {
-            if (selectedSound.Playing)
+            if (SelectedSound.Playing)
             {
-                selectedSound.Stop();
+                SelectedSound.Stop();
             }
             else
             {
-                selectedSound.Play();
+                SelectedSound.Play();
             }
         }
 
@@ -200,26 +228,26 @@ namespace Volboard
         {
             var sound = (sender as ListBox).SelectedItem as Sound;
 
-            selectedSound = sound;
+            SelectedSound = sound;
 
-            RightPanel.DataContext = selectedSound;
+            RightPanel.DataContext = SelectedSound;
         }
 
         private void StartLatencyChanged(object sender, TextChangedEventArgs e)
         {
-            if (selectedSound != null)
+            if (SelectedSound != null)
             {
                 int.TryParse((sender as TextBox).Text, out int latencyChange);
-                selectedSound.PlayLatency = latencyChange;
+                SelectedSound.PlayLatency = latencyChange;
             }
         }
 
         private void LoopLatencyChanged(object sender, TextChangedEventArgs e)
         {
-            if (selectedSound != null)
+            if (SelectedSound != null)
             {
                 int.TryParse((sender as TextBox).Text, out int latencyChange);
-                selectedSound.LoopLatency = latencyChange;
+                SelectedSound.LoopLatency = latencyChange;
             }
         }
     }
