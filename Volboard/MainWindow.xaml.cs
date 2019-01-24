@@ -24,14 +24,12 @@ namespace Volboard
 {
     public partial class MainWindow : Window
     {
-        private readonly ObservableCollection<Sound> sounds = new ObservableCollection<Sound>();
+        private ObservableCollection<Sound> sounds = new ObservableCollection<Sound>();
         private Sound selectedSound;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            UpdateSoundPanel();
 
             SoundList.ItemsSource = sounds;
             SoundList.DataContext = this;
@@ -91,8 +89,15 @@ namespace Volboard
                 {
                     Sound snd = new Sound(file);
                     sounds.Add(snd);
+                    SortSounds();
                 }
             }
+        }
+
+        private void SortSounds()
+        {
+            sounds = new ObservableCollection<Sound>(sounds.OrderBy(o => o.Key == null).ThenBy(o => o.Key).ThenBy(o => o.Name));
+            SoundList.ItemsSource = sounds;
         }
 
         private Key? RequestKey()
@@ -117,8 +122,8 @@ namespace Volboard
         private void ChangeBind(object sender, RoutedEventArgs e)
         {
             selectedSound.Key = RequestKey();
-
-            UpdateSoundPanel();
+            
+            SortSounds();
         }
 
         private void LoopUnchecked(object sender, RoutedEventArgs e)
@@ -155,8 +160,6 @@ namespace Volboard
             {
                 selectedSound.Play();
             }
-
-            UpdateSoundPanel();
         }
 
         private void ClosingMain(object sender, CancelEventArgs e)
@@ -200,12 +203,6 @@ namespace Volboard
             selectedSound = sound;
 
             RightPanel.DataContext = selectedSound;
-
-            UpdateSoundPanel();
-        }
-
-        private void UpdateSoundPanel()
-        {
         }
 
         private void StartLatencyChanged(object sender, TextChangedEventArgs e)

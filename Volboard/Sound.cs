@@ -59,19 +59,6 @@ namespace Volboard
             {
                 key = value;
                 NotifyPropertyChanged();
-                KeyBound = string.Empty;
-            }
-        }
-
-        public string KeyBound
-        {
-            get
-            {
-                return Key.ToString();
-            }
-            set
-            {
-                NotifyPropertyChanged();
             }
         }
 

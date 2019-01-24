@@ -14,13 +14,37 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <TextBlock Text="{Binding KeyBound}" ToolTip="{Binding Key}" DockPanel.Dock="Right"/>
+                        <Image Height="12" Width="12" Margin="0,0,4,0" Source="images/play.png" VerticalAlignment="Center">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Playing}" Value="true">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <TextBlock Text="{Binding Key, StringFormat={}{0}}" Margin="4,0,0,0" DockPanel.Dock="Right"/>
+                        <Image Height="12" Width="12" Margin="4,0,0,0" Source="images/loop.png" VerticalAlignment="Center" DockPanel.Dock="Right">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Loop}" Value="true">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
                         <TextBlock Text="{Binding Name}" ToolTip="{Binding FilePath}"/>
                     </DockPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListBox>
-        <DockPanel LastChildFill="True" Margin="10,10,1,0" VerticalAlignment="Top" Height="20">
+        <DockPanel LastChildFill="True" Margin="10,10,0,0" VerticalAlignment="Top" Height="20">
             <Button Content="Browse for sounds..." Click="BrowseForFile" Padding="4,1,4,1"/>
             <TextBox x:Name="SearchBox" ToolTip="Search..." VerticalContentAlignment="Center" Grid.Column="1" Margin="5,0,0,0" TextChanged="Search"/>
         </DockPanel>
@@ -44,7 +68,7 @@
             <CheckBox IsChecked="{Binding Loop}" Content="Loop" DockPanel.Dock="Top" Margin="0,0,0,5" Checked="LoopChecked" Unchecked="LoopUnchecked"/>
             <Label Content="Loop latency (ms)" DockPanel.Dock="Top"/>
             <TextBox Text="{Binding LoopLatency}" DockPanel.Dock="Top" Margin="0,0,0,5" TextChanged="LoopLatencyChanged"/>
-            
+
             <Button Content="Remove" Click="RemoveSound" DockPanel.Dock="Bottom" HorizontalAlignment="Right"/>
             <Button Click="TogglePlay" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10">
                 <Button.Style>
@@ -61,9 +85,11 @@
             <Button Click="ChangeBind" Margin="0,0,0,5" DockPanel.Dock="Bottom" Padding="1,10">
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="Content" Value="{Binding Key, StringFormat=Bound to {0}}"/>
+                        <Setter Property="ContentStringFormat" Value="Bound to {0}"/>
+                        <Setter Property="Content" Value="{Binding Key}"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Key}" Value="{x:Null}">
+                            <DataTrigger Binding="{Binding Key}" Value="{x:Null}" >
+                                <Setter Property="ContentStringFormat" Value=""/>
                                 <Setter Property="Content" Value="[Unbound]"/>
                             </DataTrigger>
                         </Style.Triggers>
