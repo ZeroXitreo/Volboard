@@ -128,7 +128,7 @@ namespace Volboard
 
             if (PlayLatency == 0)
             {
-                InternalPlay();
+                base.Play();
             }
             else
             {
@@ -147,7 +147,7 @@ namespace Volboard
             {
                 Dispatcher.Invoke(() =>
                 {
-                    InternalPlay();
+                    base.Play();
                 });
             }
         }
@@ -155,7 +155,7 @@ namespace Volboard
         public new void Stop()
         {
             Playing = false;
-            InternalStop();
+            base.Stop();
             brake.Set();
         }
 
@@ -163,11 +163,11 @@ namespace Volboard
         {
             if (Loop && Playing)
             {
-                InternalStop();
+                base.Stop();
 
                 if (LoopLatency == 0)
                 {
-                    InternalPlay();
+                    base.Play();
                 }
                 else
                 {
@@ -190,19 +190,9 @@ namespace Volboard
             {
                 Dispatcher.Invoke(() =>
                 {
-                    InternalPlay();
+                    base.Play();
                 });
             }
-        }
-
-        private void InternalStop()
-        {
-            base.Stop();
-        }
-
-        private void InternalPlay()
-        {
-            base.Play();
         }
     }
 }
