@@ -14,6 +14,35 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
+
+                        <ProgressBar Width="32" Value="{Binding Volume}" Maximum="1" LargeChange="0.1" SmallChange="0.01" DockPanel.Dock="Right"/>
+
+                        <Image Height="12" Width="12" Margin="0,0,5,0" Source="images/loop.png" VerticalAlignment="Center" DockPanel.Dock="Right">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Loop}" Value="true">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+
+                        <TextBlock Text="{Binding Key, StringFormat={}{0}}" Margin="0,0,5,0" DockPanel.Dock="Right">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Key}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
                         <Image Height="12" Width="12" Margin="0,0,4,0" Source="images/play.png" VerticalAlignment="Center">
                             <Image.Style>
                                 <Style TargetType="Image">
@@ -26,20 +55,9 @@
                                 </Style>
                             </Image.Style>
                         </Image>
-                        <TextBlock Text="{Binding Key, StringFormat={}{0}}" Margin="4,0,0,0" DockPanel.Dock="Right"/>
-                        <Image Height="12" Width="12" Margin="4,0,0,0" Source="images/loop.png" VerticalAlignment="Center" DockPanel.Dock="Right">
-                            <Image.Style>
-                                <Style TargetType="Image">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Loop}" Value="true">
-                                            <Setter Property="Visibility" Value="Visible"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Image.Style>
-                        </Image>
+
                         <TextBlock Text="{Binding Name}" ToolTip="{Binding FilePath}"/>
+
                     </DockPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -97,5 +115,8 @@
                 </Button.Style>
             </Button>
         </DockPanel>
+        <!--<DataGrid Margin="100">
+            
+        </DataGrid>-->
     </Grid>
 </Window>

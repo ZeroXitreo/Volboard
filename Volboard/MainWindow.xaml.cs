@@ -45,10 +45,8 @@ namespace Volboard
             InitializeComponent();
 
             SoundList.ItemsSource = sounds;
-            SoundList.DataContext = this;
 
             List<SoundStore> sndStores = SerializeManager.Load<List<SoundStore>>();
-
             foreach (SoundStore sndStore in sndStores)
             {
                 sounds.Add(sndStore.Export());

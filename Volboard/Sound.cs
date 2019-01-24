@@ -88,6 +88,19 @@ namespace Volboard
             }
         }
 
+        public new double Volume
+        {
+            get
+            {
+                return base.Volume;
+            }
+            set
+            {
+                base.Volume = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public int LoopLatency
         {
             get
