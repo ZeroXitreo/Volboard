@@ -25,7 +25,7 @@ namespace Volboard
         private ManualResetEvent brake = new ManualResetEvent(false);
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
