@@ -80,6 +80,7 @@
     <Compile Include="AssignKey.xaml.cs">
       <DependentUpon>AssignKey.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SoundGroup.cs" />
     <Compile Include="SoundStore.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
