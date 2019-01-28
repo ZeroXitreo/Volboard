@@ -24,7 +24,7 @@ namespace Volboard
 {
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Sound> sounds = new ObservableCollection<Sound>();
+        private ObservableCollection<Sound> sounds { get; set; } = new ObservableCollection<Sound>();
         private Sound selectedSound;
 
         private Sound SelectedSound

@@ -115,8 +115,5 @@
                 </Button.Style>
             </Button>
         </DockPanel>
-        <!--<DataGrid Margin="100">
-            
-        </DataGrid>-->
     </Grid>
 </Window>
